@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Tab Bouncer",
+  "name": "Focus Bouncer",
   "version": "1.0.0",
   "description": "Block every site except your allowed list for a set time. Only the tab you switch to is blocked; your other open tabs are left untouched.",
   "icons": {
@@ -12,14 +12,14 @@
     "scripts": ["shared.js", "background.js"]
   },
   "action": {
-    "default_title": "Tab Bouncer",
+    "default_title": "Focus Bouncer",
     "default_area": "navbar",
     "default_popup": "popup.html",
     "default_icon": "icon.svg"
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "tab-bouncer@focus.extension",
+      "id": "focus-bouncer@focus.extension",
       "strict_min_version": "140.0",
       "data_collection_permissions": {
         "required": ["none"]
