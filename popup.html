@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body class="popup">
+    <section id="idle" hidden>
+      <form id="start-form" class="row">
+        <label for="minutes">Focus for</label>
+        <input id="minutes" type="number" min="1" max="720" required>
+        <span>minutes</span>
+        <button type="submit" class="primary">Start</button>
+      </form>
+    </section>
+
+    <section id="running" hidden>
+      <div class="row">
+        <div>
+          <div id="countdown"></div>
+          <div class="muted">remaining</div>
+        </div>
+        <button id="end" type="button">End session</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Allowed sites</h2>
+      <form id="add-form" class="row">
+        <input id="domain" type="text" placeholder="example.com" autocomplete="off" spellcheck="false">
+        <button type="submit">Add</button>
+      </form>
+      <ul id="whitelist"></ul>
+      <p id="empty" class="muted" hidden>Nothing here yet, so a session will block every site.</p>
+    </section>
+
+    <script src="shared.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

@@ -1,0 +1,163 @@
+:root {
+  --bg: #fff;
+  --fg: #1c1b22;
+  --muted: #6b6a75;
+  --border: #d4d4dc;
+  --field: #f4f4f7;
+  --accent: #5b5bd6;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1b22;
+    --fg: #fbfbfe;
+    --muted: #a3a2ad;
+    --border: #45444f;
+    --field: #2b2a33;
+    --accent: #8f8fef;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 14px/1.4 system-ui, sans-serif;
+}
+
+h1 {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 16px 0 8px;
+}
+
+h2 {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin: 0 0 8px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+  background: var(--field);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+
+button {
+  cursor: pointer;
+}
+
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+#countdown {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+/* Popup */
+
+.popup {
+  width: 300px;
+}
+
+.popup section {
+  padding: 14px 16px;
+}
+
+.popup section + section {
+  border-top: 1px solid var(--border);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.row > :last-child {
+  margin-left: auto;
+}
+
+#minutes {
+  width: 56px;
+}
+
+#domain {
+  flex: 1;
+  min-width: 0;
+}
+
+.popup #countdown {
+  font-size: 26px;
+  line-height: 1.1;
+}
+
+#whitelist {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+#whitelist li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 0;
+}
+
+#whitelist span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.remove {
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 16px;
+  padding: 0 6px;
+}
+
+.remove:hover {
+  color: var(--fg);
+}
+
+#empty {
+  margin: 8px 0 0;
+}
+
+/* Block page */
+
+.blocked {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+.blocked main {
+  padding: 24px;
+}
+
+.blocked p {
+  margin: 0 0 24px;
+}
