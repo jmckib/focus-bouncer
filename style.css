@@ -99,6 +99,16 @@ button.primary {
   width: 56px;
 }
 
+#presets {
+  margin-top: 10px;
+}
+
+#presets button {
+  flex: 1;
+  margin: 0;
+  padding: 6px 0;
+}
+
 #domain {
   flex: 1;
   min-width: 0;

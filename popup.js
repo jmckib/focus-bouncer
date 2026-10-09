@@ -29,11 +29,18 @@ function renderWhitelist() {
   $("empty").hidden = state.whitelist.length > 0;
 }
 
+function startSession(minutes) {
+  browser.storage.local.set({ sessionEnd: Date.now() + minutes * 60000 });
+}
+
 $("start-form").addEventListener("submit", (e) => {
   e.preventDefault();
-  const minutes = $("minutes").valueAsNumber;
-  browser.storage.local.set({ lastMinutes: minutes, sessionEnd: Date.now() + minutes * 60000 });
+  startSession($("minutes").valueAsNumber);
 });
+
+for (const button of $("presets").children) {
+  button.addEventListener("click", () => startSession(Number(button.dataset.minutes)));
+}
 
 $("end").addEventListener("click", () => {
   browser.storage.local.set({ sessionEnd: 0 });
@@ -64,7 +71,6 @@ browser.storage.local.onChanged.addListener((changes) => {
 
 browser.storage.local.get(DEFAULTS).then((stored) => {
   state = stored;
-  $("minutes").value = state.lastMinutes;
   renderSession();
   renderWhitelist();
   setInterval(renderSession, 1000);

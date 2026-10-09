@@ -19,7 +19,8 @@ function enqueue(fn) {
 async function enforce(windowId, navigatedTabId) {
   const state = await getState();
   if (state.sessionEnd <= Date.now()) return;
-  const [tab] = await browser.tabs.query({ windowId, active: true, windowType: "normal" });
+  const active = await browser.tabs.query({ windowId, active: true, windowType: "normal" });
+  const tab = active.find((t) => !closedTabs.has(t.id));
   if (!tab || !isBlocked(tab.url, state.whitelist)) return;
 
   if (tab.id === navigatedTabId) {
@@ -34,13 +35,23 @@ async function enforce(windowId, navigatedTabId) {
 
 async function bounce(blockedTab, whitelist) {
   const tabs = await browser.tabs.query({ windowId: blockedTab.windowId, hidden: false });
-  const allowed = tabs.filter((t) => t.id !== blockedTab.id && !isBlocked(t.url, whitelist));
-  if (allowed.length) {
-    const previous = allowed.reduce((a, b) => (b.lastAccessed > a.lastAccessed ? b : a));
-    await browser.tabs.update(previous.id, { active: true });
-  } else {
-    await browser.tabs.create({ windowId: blockedTab.windowId, url: BLOCK_PAGE });
+  const allowed = tabs
+    .filter((t) => t.id !== blockedTab.id && !closedTabs.has(t.id) && !isBlocked(t.url, whitelist))
+    .sort((a, b) => b.lastAccessed - a.lastAccessed);
+  // Go back to the most recently used allowed tab. A tab that is mid-close can
+  // still be listed, so check that each switch actually took.
+  let switched = false;
+  for (const candidate of allowed) {
+    try {
+      await browser.tabs.update(candidate.id, { active: true });
+    } catch {
+      continue; // candidate is gone
+    }
+    const blocked = await browser.tabs.get(blockedTab.id).catch(() => null);
+    switched = !blocked || !blocked.active;
+    if (switched) break;
   }
+  if (!switched) await browser.tabs.create({ windowId: blockedTab.windowId });
   flashBadge();
 }
 
@@ -83,7 +94,14 @@ async function sync() {
   updateBadge();
 }
 
+// Firefox keeps listing a tab in tabs.query for a moment after it is closed.
+const closedTabs = new Set();
 let lastActivated = { tabId: null, time: 0 };
+
+browser.tabs.onRemoved.addListener((tabId, { windowId, isWindowClosing }) => {
+  closedTabs.add(tabId);
+  if (!isWindowClosing) enqueue(() => enforce(windowId));
+});
 
 browser.tabs.onActivated.addListener(({ tabId, windowId }) => {
   lastActivated = { tabId, time: Date.now() };

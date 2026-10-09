@@ -1,6 +1,6 @@
 // Loaded by the background script, the popup and the block page.
 
-const DEFAULTS = { whitelist: [], sessionEnd: 0, lastMinutes: 25 };
+const DEFAULTS = { whitelist: [], sessionEnd: 0 };
 
 // "https://www.Reddit.com/r/foo" -> "reddit.com". Returns null if unusable.
 function normalizeDomain(input) {
