@@ -22,3 +22,11 @@ To check the manifest and code against Mozilla's rules:
 ```bash
 npx web-ext lint
 ```
+
+## Building
+
+To build the zip for upload to addons.mozilla.org (written to `web-ext-artifacts/`):
+
+```bash
+npx web-ext build --overwrite-dest
+```
