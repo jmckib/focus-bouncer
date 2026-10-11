@@ -96,25 +96,22 @@ async function sync() {
 
 // Firefox keeps listing a tab in tabs.query for a moment after it is closed.
 const closedTabs = new Set();
-let lastActivated = { tabId: null, time: 0 };
 
 browser.tabs.onRemoved.addListener((tabId, { windowId, isWindowClosing }) => {
   closedTabs.add(tabId);
   if (!isWindowClosing) enqueue(() => enforce(windowId));
 });
 
-browser.tabs.onActivated.addListener(({ tabId, windowId }) => {
-  lastActivated = { tabId, time: Date.now() };
+browser.tabs.onActivated.addListener(({ windowId }) => {
   enqueue(() => enforce(windowId));
 });
 
 browser.tabs.onUpdated.addListener(
   (tabId, changeInfo, tab) => {
     if (!tab.active) return;
-    // A URL change right after switching to a tab is that tab (re)loading,
-    // not the user navigating, so treat it as a switch.
-    const justActivated = lastActivated.tabId === tabId && Date.now() - lastActivated.time < 1000;
-    enqueue(() => enforce(tab.windowId, justActivated ? undefined : tabId));
+    // Switching to a tab that already shows a blocked site is handled by
+    // onActivated, which is queued first and has bounced by the time this runs.
+    enqueue(() => enforce(tab.windowId, tabId));
   },
   { properties: ["url"] }
 );
