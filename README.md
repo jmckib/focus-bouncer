@@ -7,6 +7,13 @@ A Firefox extension that blocks every site except your allowed list for a set am
 - The allowed list is saved permanently and can be edited mid-session.
 - You can end a session at any time.
 
+Install it here: https://addons.mozilla.org/en-US/firefox/addon/focus-bouncer/
+
+<img width="420" height="400" alt="image" src="https://github.com/user-attachments/assets/d154ac57-b75b-4ec6-9594-5c334bccfdd3" />
+
+<img width="484" height="400" alt="image" src="https://github.com/user-attachments/assets/7bd0b8d5-eac2-428a-a260-325c995f4653" />
+
+
 ## Testing
 
 Requires Firefox 140 or later.
